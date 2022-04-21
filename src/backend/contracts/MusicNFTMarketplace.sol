@@ -16,6 +16,7 @@ contract MusicNFTMarketplace is ERC721(
         address payable seller;
         uint256 price;
     }
+
     MarketItem[] public marketItems;
 
     event MarketItemBought (
@@ -25,11 +26,11 @@ contract MusicNFTMarketplace is ERC721(
         uint256 price
     );
 
-    event MarketItemListed(
+    event MarketItemRelisted(
         uint256 indexed tokenId,
         address indexed seller,
         uint256 price
-    )
+    );
 
     constructor(
         uint256 _royaltyFee,
@@ -48,6 +49,7 @@ contract MusicNFTMarketplace is ERC721(
             marketItems.push(MarketItem(i, payable(msg.sender), _prices[i]));
         }
     }
+    
     function updateRoyaltyFee(uint256 _royaltyFee) external onlyOwner {
         royaltyFee = _royaltyFee;
     }
@@ -66,15 +68,16 @@ contract MusicNFTMarketplace is ERC721(
         emit MarketItemBought(_tokenId, seller, msg.sender, price);
     }
 
-    function resellTokens(uint256 _tokenId, uint256 _price) external payable {
+       function resellToken(uint256 _tokenId, uint256 _price) external payable {
         require(msg.value == royaltyFee, "Must pay royalty");
-        require(_price > 0, "price must be great than zero");
+        require(_price > 0, "Price must be greater than zero");
         marketItems[_tokenId].price = _price;
         marketItems[_tokenId].seller = payable(msg.sender);
 
         _transfer(msg.sender, address(this), _tokenId);
-        emit MarketItemsListed(_tokenId, msg.sender _price);
+        emit MarketItemRelisted(_tokenId, msg.sender, _price);
     }
+    
 }
 
 
