@@ -123,7 +123,7 @@ describe("MusicNFTMarketplace", function() {
         it("Should fail if price is set to zero and royalty fee is not paid", async function () {
       await expect(
         nftMarketplace.connect(user1).resellToken(0, 0, { value: royaltyFee })
-      ).to.be.revertedWith("Price must be greater than zero");
+      ).to.be.revertedWith("Price must be greater than zero.");
       await expect(
         nftMarketplace.connect(user1).resellToken(0, toWei(1), { value: 0 })
       ).to.be.revertedWith("Must pay royalty");
