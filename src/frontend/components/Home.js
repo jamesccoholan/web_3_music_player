@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { ethers } from "ethers"
 import Identicon from 'identicon.js';
 import { Card, Button, ButtonGroup } from 'react-bootstrap'
+// import Image from "/Users/jamescoholan/Downloads/starter_kit_2-main/src/Assets/DAC_16.png"
 
 const Home = ({ contract }) => {
   const audioRef = useRef(null);
@@ -12,6 +13,7 @@ const Home = ({ contract }) => {
   const loadMarketplaceItems = async () => {
     // Get all unsold items/tokens
     const results = await contract.getAllUnsoldTokens()
+
     const marketItems = await Promise.all(results.map(async i => {
       // get uri url from contract
       const uri = await contract.tokenURI(i.tokenId)
@@ -29,13 +31,16 @@ const Home = ({ contract }) => {
       }
       return item
     }))
+
     setMarketItems(marketItems)
     setLoading(false)
   }
+
   const buyMarketItem = async (item) => {
     await (await contract.buyToken(item.itemId, { value: item.price })).wait()
     loadMarketplaceItems()
   }
+
   const skipSong = (forwards) => {
     if (forwards) {
       setCurrentItemIndex(() => {
@@ -57,6 +62,7 @@ const Home = ({ contract }) => {
       })
     }
   }
+
   useEffect(() => {
     if (isPlaying) {
       audioRef.current.play()
@@ -64,6 +70,7 @@ const Home = ({ contract }) => {
       audioRef.current.pause()
     }
   })
+
   useEffect(() => {
     !marketItems && loadMarketplaceItems()
   })
@@ -73,10 +80,9 @@ const Home = ({ contract }) => {
       <h2>Loading...</h2>
     </main>
   )
+
   return (
-
     <div className="container-fluid mt-5">
-
       {marketItems.length > 0 ?
         <div className="row">
           <main role="main" className="col-lg-12 mx-auto" style={{ maxWidth: '500px' }}>
@@ -84,7 +90,7 @@ const Home = ({ contract }) => {
               <audio src={marketItems[currentItemIndex].audio} ref={audioRef}></audio>
               <Card>
                 <Card.Header>{currentItemIndex + 1} of {marketItems.length}</Card.Header>
-                <Card.Img variant="top" src={marketItems[currentItemIndex].identicon} />
+                <Card.Img variant="top" src="https://ik.imagekit.io/mbhxghyf1m2/DACMAIN3_LuQWU0BC-.png?ik-sdk-version=javascript-1.4.3&updatedAt=1650584978324" />
                 <Card.Body color="secondary">
                   <Card.Title as="h2" > {marketItems[currentItemIndex].name}</Card.Title>
                   <div className="d-grid px-4">

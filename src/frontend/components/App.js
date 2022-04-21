@@ -29,12 +29,14 @@ function App() {
     const signer = provider.getSigner()
     loadContract(signer)
   }
+  
   const loadContract = async (signer) => {
     // Get deployed copy of music nft marketplace contract
     const contract = new ethers.Contract(MusicNFTMarketplaceAddress.address, MusicNFTMarketplaceAbi.abi, signer)
     setContract(contract)
     setLoading(false)
   }
+
   return (
     <BrowserRouter>
       <div className="App">
@@ -61,7 +63,6 @@ function App() {
                       rel="noopener noreferrer"
                       className="button nav-button btn-sm mx-4">Trailer
                   </Nav.Link>
-                
                 </Nav>
                 <Nav>
                   {account ? (
@@ -73,7 +74,6 @@ function App() {
                       <Button variant="outline-light">
                         {account.slice(0, 5) + '...' + account.slice(38, 42)}
                       </Button>
-
                     </Nav.Link>
                   ) : (
                     <Button onClick={web3Handler} variant="outline-light">Connect Wallet</Button>
@@ -105,7 +105,6 @@ function App() {
         </div>
       </div>
     </BrowserRouter>
-
   );
 }
 
