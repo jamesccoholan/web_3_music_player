@@ -28,7 +28,9 @@ function App() {
     loadContract(signer)
   }
   const loadContract = async (signer) => {
-
+    const contract = new ethers.Contract(MusicNFTMarketplaceAddress.address, MusicNFTMarketplaceAbi.abi, signer)
+    setContract(contract)
+    setLoading(false)
   }
 
   return (
