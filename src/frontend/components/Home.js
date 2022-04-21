@@ -1,91 +1,93 @@
 import { useState, useEffect, useRef } from 'react'
-import { ethers } from 'ethers'
+import { ethers } from "ethers"
 import Identicon from 'identicon.js';
 import { Card, Button, ButtonGroup } from 'react-bootstrap'
 
 const Home = ({ contract }) => {
-    const audioRed = useRef(null);
-    const [isPlaying, setIsPlaying] = useState(null)
-    const [currentTimeIndex, setCurrentItemIndex] = useState(0)
-    const [loading, setLoading] = useState(true)
-    const [marketitems, setMarketItems] = useState(null)
-
-    const loadMarketplaceItems = async() => {
-        const results = await contract.getAllUnsoldtokens()
-        const marketItems = await Promise.all(results.map(async i => {
-            const uri = await contract,tokenURI(i.tokenId)
-            const response - await fetch(Uri + ".json")
-            const metadata = await response.json()
-            const identicon = `data:image/png;base64,${new Identicon(metadata.name + metadata.price, 330).toString()}`
-            return ({
-                price: i.price,
-                itemId: i.tokenId,
-                name: metadata.name,
-                audio: metadata.audio,
-                identicon
-            })
-        }))
-        setMarketItems(marketItems)
-        setLoading(false)
-    }
-
-    const buyMarketItem = async (item) => {
-        await (await contract.buyToken(item.itemId, { value: item.price})).wait()
-        loadMarketplaceItems()
-    }
-
-    const skipSong = (forwards) => {
-         if(forwards) {
-             setCurrentItemIndex{()=>{
-                 let index = currentItemIndex
-                 index++
-                 if (index > marketItems.length -1) {
-                     index = 0;
-                 }
-                 return index
-             }}
-         } else  {
-             setCurrentItemIndex(()=>{
-                 let index = currentItemIndex
-                 index--
-                 if (index < 0) {
-                     index = marketItems.length -1;
-                 }
-                 return index
-             })
-         }
-    }
-
-    useEffect(()=> {
-        if (isPlaying) {
-            audioRef.current.play()
-        } else if (isPlaying !== null){
-            audioRef.current.pause()
+  const audioRef = useRef(null);
+  const [loading, setLoading] = useState(true)
+  const [isPlaying, setIsPlaying] = useState(null)
+  const [currentItemIndex, setCurrentItemIndex] = useState(0)
+  const [marketItems, setMarketItems] = useState(null)
+  const loadMarketplaceItems = async () => {
+    // Get all unsold items/tokens
+    const results = await contract.getAllUnsoldTokens()
+    const marketItems = await Promise.all(results.map(async i => {
+      // get uri url from contract
+      const uri = await contract.tokenURI(i.tokenId)
+      // use uri to fetch the nft metadata stored on ipfs 
+      const response = await fetch(uri + ".json")
+      const metadata = await response.json()
+      const identicon = `data:image/png;base64,${new Identicon(metadata.name + metadata.price, 330).toString()}`
+      // define item object
+      let item = {
+        price: i.price,
+        itemId: i.tokenId,
+        name: metadata.name,
+        audio: metadata.audio,
+        identicon
+      }
+      return item
+    }))
+    setMarketItems(marketItems)
+    setLoading(false)
+  }
+  const buyMarketItem = async (item) => {
+    await (await contract.buyToken(item.itemId, { value: item.price })).wait()
+    loadMarketplaceItems()
+  }
+  const skipSong = (forwards) => {
+    if (forwards) {
+      setCurrentItemIndex(() => {
+        let index = currentItemIndex
+        index++
+        if (index > marketItems.length - 1) {
+          index = 0;
         }
-    })
+        return index
+      })
+    } else {
+      setCurrentItemIndex(() => {
+        let index = currentItemIndex
+        index--
+        if (index < 0) {
+          index = marketItems.length - 1;
+        }
+        return index
+      })
+    }
+  }
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play()
+    } else if (isPlaying !== null) {
+      audioRef.current.pause()
+    }
+  })
+  useEffect(() => {
+    !marketItems && loadMarketplaceItems()
+  })
 
-    useEffect(() => {
-        !marketItems && loadMarketplaceItems()
-    })
+  if (loading) return (
+    <main style={{ padding: "1rem 0" }}>
+      <h2>Loading...</h2>
+    </main>
+  )
+  return (
 
-    if (loading) return (
-        <main style = {{padding: "1rem 0"}}>
-            <h2>Loading...</h2>
-        </main>
-    )
-    return (
-        <div className="container-fluid mt-5">
-            {marketItems.length > 0 ?
-                <div className="row">
-                    <main role="main" className="col-lg-12 mx-auto" style={{ maxWidth: '500px'}}>
-                        <div className="content mx-auto">
-                            <audio src={marketItems[currentItemIndex].audio} ref={audioRef}></audio>
-                            <Card>
-                                <Card.Header>{currentItemIndex + 1} of {marketItems.length}</Card.Header>
-                                <Card.Img variant="top" src={marketItems[currentItemIndex].indenticon} />
-                                <Card.Body color="secondary">
-                                    <Card.Title as="h2" > {marketItems[currentItemIndex].name}</Card.Title>
-                                    <div className="d-grid px-4">
+    <div className="container-fluid mt-5">
+
+      {marketItems.length > 0 ?
+        <div className="row">
+          <main role="main" className="col-lg-12 mx-auto" style={{ maxWidth: '500px' }}>
+            <div className="content mx-auto">
+              <audio src={marketItems[currentItemIndex].audio} ref={audioRef}></audio>
+              <Card>
+                <Card.Header>{currentItemIndex + 1} of {marketItems.length}</Card.Header>
+                <Card.Img variant="top" src={marketItems[currentItemIndex].identicon} />
+                <Card.Body color="secondary">
+                  <Card.Title as="h2" > {marketItems[currentItemIndex].name}</Card.Title>
+                  <div className="d-grid px-4">
                     <ButtonGroup size="lg" aria-label="Basic example">
                       <Button variant="secondary" onClick={() => skipSong(false)}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-skip-backward" viewBox="0 0 16 16">
@@ -110,24 +112,25 @@ const Home = ({ contract }) => {
                       </Button>
                     </ButtonGroup>
                   </div>
-                                </Card.Body>    
-                                <Card.Footer>
-                                    <div className='d-grid my-1'>
-                                        <Button onClick={() => buyMarketItem)marketItems[currentItemIndex]} variant="primary" size="lg">
-                                            {`Buy for ${ethers.utils.formatEhter(marketItems[currentIndex].price)}ETH`}
-                                            </Button>
-                                    </div>
-                                </Card.Footer>
-                            </Card>
-                        </div>
-                    </main>
-                </div>
-                : (
-                    <main style={{ padding: "1rem 0"}}>
-                        <h2>No listed Assets</h2>
-                    </main>
-                )}
-        </div>
-    );
+                </Card.Body>
+                <Card.Footer>
+                  <div className='d-grid my-1'>
+                    <Button onClick={() => buyMarketItem(marketItems[currentItemIndex])} variant="primary" size="lg">
+                      {`Buy for ${ethers.utils.formatEther(marketItems[currentItemIndex].price)} ETH`}
+                    </Button>
+                  </div>
+                </Card.Footer>
+              </Card>
+            </div>
+          </main >
+        </div >
+        : (
+          <main style={{ padding: "1rem 0" }}>
+            <h2>No listed assets</h2>
+          </main>
+        )}
+
+    </div >
+  );
 }
 export default Home

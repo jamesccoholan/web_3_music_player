@@ -11,8 +11,8 @@ import MusicNFTMarketplaceAddress from '../contractsData/MusicNFTMarketplace-add
 import { Spinner, Navbar, Nav, Button, Container } from 'react-bootstrap'
 import logo from './logo.png'
 import Home from './Home.js'
-import MyTokens from './MyTokens'
- 
+import MyTokens from './MyTokens.js'
+import MyResales from './MyResales.js'
 import './App.css';
 
 function App() {
@@ -21,20 +21,20 @@ function App() {
   const [contract, setContract] = useState({})
 
   const web3Handler = async () => {
-    const accounts = await window.etherum.request({ method: 'eth_requestAccounts'});
-    setAccount(accounts[0]) 
-
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    setAccount(accounts[0])
+    // Get provider from Metamask
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-  
-    const signer = provider.getSinger()
+    // Get signer
+    const signer = provider.getSigner()
     loadContract(signer)
   }
   const loadContract = async (signer) => {
+    // Get deployed copy of music nft marketplace contract
     const contract = new ethers.Contract(MusicNFTMarketplaceAddress.address, MusicNFTMarketplaceAbi.abi, signer)
     setContract(contract)
     setLoading(false)
   }
-
   return (
     <BrowserRouter>
       <div className="App">
