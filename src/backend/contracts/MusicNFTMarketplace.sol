@@ -18,12 +18,18 @@ contract MusicNFTMarketplace is ERC721(
     }
     MarketItem[] public marketItems;
 
-    event MarketItemBought {
+    event MarketItemBought (
         uint256 indexed tokenId,
         address indexed seller,
         address buyer,
         uint256 price
-    }
+    );
+
+    event MarketItemListed(
+        uint256 indexed tokenId,
+        address indexed seller,
+        uint256 price
+    )
 
     constructor(
         uint256 _royaltyFee,
@@ -45,17 +51,29 @@ contract MusicNFTMarketplace is ERC721(
     function updateRoyaltyFee(uint256 _royaltyFee) external onlyOwner {
         royaltyFee = _royaltyFee;
     }
+    
     function buyToken(uint256 _tokenId) external payable {
         uint256 price = marketItems[_tokenId].price;
-        address seller = marektItems[_tokenId].seller;
+        address seller = marketItems[_tokenId].seller;
         require(
             msg.value == price,
-            "Please send the adking price in order to complete the purchase"
+            "Please send the asking price in order to complete the purchase"
         );
         marketItems[_tokenId].seller = payable(address(0));
         _transfer(address(this), msg.sender, _tokenId);
         payable(artist).transfer(royaltyFee);
         payable(seller).transfer(msg.value);
+        emit MarketItemBought(_tokenId, seller, msg.sender, price);
+    }
+
+    function resellTokens(uint256 _tokenId, uint256 _price) external payable {
+        require(msg.value == royaltyFee, "Must pay royalty");
+        require(_price > 0, "price must be great than zero");
+        marketItems[_tokenId].price = _price;
+        marketItems[_tokenId].seller = payable(msg.sender);
+
+        _transfer(msg.sender, address(this), _tokenId);
+        emit MarketItemsListed(_tokenId, msg.sender _price);
     }
 }
 
