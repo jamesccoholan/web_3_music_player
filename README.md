@@ -8,7 +8,3 @@
 - [Hardhat](https://hardhat.org/) (Development Framework)
 - [Ipfs](https://ipfs.io/) (Metadata storage)
 - [React routers](https://v5.reactrouter.com/) (Navigational components)
-
-
-Live Site
-https://the-great-jamesccoholan-site.netlify.app/
