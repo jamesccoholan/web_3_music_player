@@ -129,4 +129,21 @@ describe("MusicNFTMarketplace", function() {
       ).to.be.revertedWith("Must pay royalty");
     });
   });
+  describe("Getter functions", function (){
+    let soldItems = [0,1,4]
+    let ownedByUsers1 =[0,1]
+    let ownedByUsers2 = [4]
+    beforeEach(async function() {
+      await (await nftMarketplace.connect(user1).buyToken(0, { value: prices[0] })).wait();
+      await (await nftMarketplace.connect(user2).bnuyToken(1, { value: prices[1] })).wait();
+      await (await nftMarketplace.connect(user2).buyToken(4, { value: prices[4] })).wait();
+    })
+
+    it("getAllUnsoldTokens should fetch all the marketplace items up for sale", async fucntion () {
+
+    });
+    it("getMyTokens should fetch all tokens the user owns", async function () {
+
+    });
+  });
 });

@@ -95,13 +95,17 @@ contract MusicNFTMarketplace is ERC721(
         uint256 myTokenCount = balanceOf(msg.sender);
         MarketItem[] memory tokens = new MarketItem[](myTokenCount);
         uint256 currentIndex;
-        for (uint256 i=0; i < marketItem.length; i++){
-            if(ownerOf(i) == msg.sender) {
+        for (uint256 i=0; i < marketItem.length; i++) {
+            if (ownerOf(i) == msg.sender) {
                 tokens[currentIndex] = marketItems[i];
                 currentIndex++;
             }
         }
         return (tokens);
+    }
+
+    function _baseURI() internal view virtual override returns (string memory){
+        return baseURI;
     }
 }
 
