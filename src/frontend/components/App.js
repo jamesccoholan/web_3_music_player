@@ -16,10 +16,21 @@ import './App.css';
 function App() {
   const [loading, setLoading] = useState(true)
   const [account, setAccount] = useState(null)
+  const [contract, setContract] = useState({})
 
   const web3Handler = async () => {
+    const accounts = await window.etherum.request({ method: 'eth_requestAccounts'});
+    setAccount(accounts[0]) 
+
     const provider = new ehters.providers.Web3Provider(window.ethereum)
   
+    const signer = provider.getSinger()
+    loadContract(signer)
+  }
+  const loadContract = async (signer) => {
+
+  }
+
   return (
     <BrowserRouter>
       <div className="App">
