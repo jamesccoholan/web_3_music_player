@@ -10,6 +10,8 @@ import MusicNFTMarketplaceAbi from '../contractsData/MusicNFTMarketplace.json'
 import MusicNFTMarketplaceAddress from '../contractsData/MusicNFTMarketplace-address.json'
 import { Spinner, Navbar, Nav, Button, Container } from 'react-bootstrap'
 import logo from './logo.png'
+import Home from './Home.js'
+import MyTokens from './MyTokens'
  
 import './App.css';
 
@@ -22,7 +24,7 @@ function App() {
     const accounts = await window.etherum.request({ method: 'eth_requestAccounts'});
     setAccount(accounts[0]) 
 
-    const provider = new ehters.providers.Web3Provider(window.ethereum)
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
   
     const signer = provider.getSinger()
     loadContract(signer)
