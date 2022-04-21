@@ -8,7 +8,7 @@ describe("MusicNFTMarketplace", function () {
   let nftMarketplace
   let deployer, artist, user1, user2, users;
   let royaltyFee = toWei(0.01); // 1 ether = 10^18 wei
-  let URI = "https://bafybeidhjjbjonyqcahuzlpt7sznmh4xrlbspa3gstop5o47l6gsiaffee.ipfs.nftstorage.link/"
+  let URI = "https://bafybeia7s24me4yhyadweka6iezlm2cywvysk7veun223s6wbtixyzha5y.ipfs.nftstorage.link/"
   let prices = [toWei(1), toWei(2), toWei(3), toWei(4), toWei(5), toWei(6), toWei(7), toWei(8)]
   let deploymentFees = toWei(prices.length * 0.01)
   beforeEach(async function () {
@@ -39,7 +39,7 @@ describe("MusicNFTMarketplace", function () {
     });
 
     it("Should mint then list all the music nfts", async function () {
-      expect(await nftMarketplace.balanceOf(nftMarketplace.address)).to.equal(8);
+      expect(await nftMarketplace.balanceOf(nftMarketplace.address)).to.equal(12);
       // Get each item from the marketItems array then check fields to ensure they are correct
       await Promise.all(prices.map(async (i, indx) => {
         const item = await nftMarketplace.marketItems(indx)

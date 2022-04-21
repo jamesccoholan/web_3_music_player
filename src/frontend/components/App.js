@@ -48,13 +48,13 @@ function App() {
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
-                  <Nav.Link as={Link} to="/">Home</Nav.Link>
-                  <Nav.Link as={Link} to="/my-tokens">My Tokens</Nav.Link>
-                  <Nav.Link as={Link} to="/my-resales">My Resales</Nav.Link>
+                  <Nav.Link as={Link} to="/">Marketplace</Nav.Link>
+                  <Nav.Link as={Link} to="/my-tokens">My DAC Songs</Nav.Link>
+                  <Nav.Link as={Link} to="/my-resales">Resales</Nav.Link>
                   <Nav.Link href={`https://www.discoastronautclub.com/`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="button nav-button btn-sm mx-4">DAC Site
+                      className="button nav-button btn-sm mx-4">DAC Homepage
                   </Nav.Link>
                   <Nav.Link href={`https://www.youtube.com/watch?v=ezRnFj08KlI&feature=youtu.be`}
                       target="_blank"
