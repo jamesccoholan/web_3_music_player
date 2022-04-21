@@ -46,10 +46,10 @@ export default function MyTokens({ contract }) {
   }
   useEffect(() => {
     if (isPlaying) {
-      audioRefs.current[selected].play()
-      if (selected !== previous) audioRefs.current[previous].pause()
+        audioRefs.current[selected].play()
+        if (selected !== previous) audioRefs.current[previous].pause()
     } else if (isPlaying !== null) {
-      audioRefs.current[selected].pause()
+        audioRefs.current[selected].pause()
     }
 
   })
