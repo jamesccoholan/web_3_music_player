@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 
-const towei = (num) => ethers.utils.parseEther(num.toString())
+const toWei = (num) => ethers.utils.parseEther(num.toString())
 const fromWei = (num) => ethers.utils.formatEther(num)
 
 describe("MusicNFTMarketplace", function() {
@@ -8,25 +8,27 @@ describe("MusicNFTMarketplace", function() {
     let deployer, artist, user1, user2, users;
     let royaltyFee = toWei(0.01);
     let URI = "https://bafybeidhjjbjonyqcahuzlpt7sznmh4xrlbspa3gstop5o47l6gsiaffee.ipfs.nftstorage.link/"
-    ler prices = [toWei(1), toWei(2), toWei(3), toWei(4), toWei(5), toWei(6), toWei(7), toWei(8)]
+    let prices = [toWei(1), toWei(2), toWei(3), toWei(4), toWei(5), toWei(6), toWei(7), toWei(8)]
     let deploymentFees = toWei(prices.length * 0.01)
-    beforeEach(async function() {
-        const NFTMarketplaceFactory = await ethers.getContractFactory("MusicNFTMarketplace");
-        [deployer, artist, user1, user2, ...users] = await ethers.getSigners();
+    beforeEach(async function () {
+    // Get the ContractFactory and Signers here.
+    const NFTMarketplaceFactory = await ethers.getContractFactory("MusicNFTMarketplace");
+    [deployer, artist, user1, user2, ...users] = await ethers.getSigners();
 
-        nftMarketplace = await NFTMarketplaceFactory.deploy(
-            royaltyFee,
-            artist.addresss,
-            prices,
-            { value: deploymentFees }
+    // Deploy music nft marketplace contract
+    nftMarketplace = await NFTMarketplaceFactory.deploy(
+      royaltyFee,
+      artist.address,
+      prices,
+      { value: deploymentFees }
         );
     });
 
-    describe ("Deployment", fucntion () {
-        it("Should track name, symbol, URI, Royalty dfee and Artist", async fucntion(){
+    describe ("Deployment", function () {
+        it("Should track name, symbol, URI, royalty fee and artist", async function () {
             const nftName = "MusicApp"
             const nftSymbol = "MDAPP"
-            expect(await nftMarketplace.name().to.equal(nftName);
+            expect(await nftMarketplace.name()).to.equal(nftName);
             expect(await nftMarketplace.symbol()).to.equal(nftSymbol);
             expect(await nftMarketplace.baseURI()).to.equal(URI);
             expect(await nftMarketplace.royaltyFee()).to.equal(royaltyFee);
@@ -37,13 +39,24 @@ describe("MusicNFTMarketplace", function() {
             expect(await nftMarketplace.balanceOf(nftMarketplace.address)).to.equal(8);
 
             await Promise.all(prices.map(async (i, indx) => {
-                const item = await nftMarketplace.marketItem(indx)
+                const item = await nftMarketplace.marketItems(indx)
                 expect(item.tokenId).to.equal(indx)
                 expect(item.seller).to.equal(deployer.address)
                 expect(item.price).to.equal(i)
             }))
         });
-        it("Ether balance should equal deployment fees")
+        it("Ether balance should equal deployment fees", async function() {
+            expect(await ethers.provider.getBalance(nftMarketplace.address)).to.equal(deploymentFees)
+        });
     });
-
+    describe("Updating royalty fee", function () {
+        it("Only deployer should be able to update royalty fee", async function () {
+            const fee = toWei(0.02)
+            await nftMarketplace.updateRoyaltyFee(fee)
+            await expect(
+                nftMarketplace.connect(user1),updateRoyaltyFee(fee)
+            ).to.be.revertedWith("Ownable: caller is not the owner");
+            expect(await nftMarketplace.royaltyFee()).to.equal(fee)
+        }); 
+    });
 });

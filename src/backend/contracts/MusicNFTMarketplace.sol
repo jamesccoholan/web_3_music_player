@@ -35,6 +35,9 @@ contract MusicNFTMarketplace is ERC721(
             marketItems.push(MarketItem(i, payable(msg.sender), _prices[i]));
         }
     }
+    function updateRoyaltyFee(uint256 _royaltyFee) external onlyOwner {
+        royaltyFee = _royaltyFee;
+    }
 }
 
 
