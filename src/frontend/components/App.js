@@ -4,7 +4,7 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-import { useState } from 'react'
+import { useState } from 'react'  
 import { ethers } from "ethers"
 import MusicNFTMarketplaceAbi from '../contractsData/MusicNFTMarketplace.json'
 import MusicNFTMarketplaceAddress from '../contractsData/MusicNFTMarketplace-address.json'
@@ -41,9 +41,9 @@ function App() {
         <>
           <Navbar expand="lg" bg="secondary" variant="dark">
             <Container>
-              <Navbar.Brand href="http://www.dappuniversity.com/bootcamp">
+              <Navbar.Brand href="https://www.discoastronautclub.com/">
                 <img src={logo} width="40" height="40" className="" alt="" />
-                &nbsp; Music NFT player
+                &nbsp; DAC Music NFTs
               </Navbar.Brand>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
@@ -51,6 +51,17 @@ function App() {
                   <Nav.Link as={Link} to="/">Home</Nav.Link>
                   <Nav.Link as={Link} to="/my-tokens">My Tokens</Nav.Link>
                   <Nav.Link as={Link} to="/my-resales">My Resales</Nav.Link>
+                  <Nav.Link href={`https://www.discoastronautclub.com/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="button nav-button btn-sm mx-4">DAC Site
+                  </Nav.Link>
+                  <Nav.Link href={`https://www.youtube.com/watch?v=ezRnFj08KlI&feature=youtu.be`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="button nav-button btn-sm mx-4">Trailer
+                  </Nav.Link>
+                
                 </Nav>
                 <Nav>
                   {account ? (
