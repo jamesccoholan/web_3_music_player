@@ -6,7 +6,12 @@ async function main() {
 
   // deploy contracts here:
   const NFTMarketplaceFactory = await ethers.getContractFactory("MusicNFTMarketplace");
-  const nftMarketplace = await NFTMarketplaceFactory.deploy()
+  const nftMarketplace = await NFTMarketplaceFactory.deploy(
+     royaltyFee,
+     artist.address,
+     prices,
+     { value: deploymentFees }
+  );
  
   console.log("Smart contract Address:", nftMarketplace.address)
   // For each contract, pass the deployed contract and name to this function to save a copy of the contract ABI and address to the front end.
