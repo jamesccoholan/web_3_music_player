@@ -5,10 +5,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract MusicNFTMarketplace is ERC721("DAppFi", "DAPP"), Ownable {
+    
     string public baseURI =
         "https://bafybeiain2q2jseyi5luc2t5bejyhja655w7zkv6bilod6dgipjcori2ma.ipfs.nftstorage.link/";
+    
     string public baseExtension = ".json";
+   
     address public artist;
+    
     uint256 public royaltyFee;
  
     struct MarketItem {
@@ -42,7 +46,9 @@ contract MusicNFTMarketplace is ERC721("DAppFi", "DAPP"), Ownable {
             _prices.length * _royaltyFee <= msg.value,
             "Deployer must pay royalty fee for each token listed on the marketplace"
         );
+        
         royaltyFee = _royaltyFee;
+
         artist = _artist;
         for (uint256 i = 0; i < _prices.length; i++) {
             require(_prices[i] > 0, "Price must be greater than 0");
@@ -65,6 +71,7 @@ contract MusicNFTMarketplace is ERC721("DAppFi", "DAPP"), Ownable {
             msg.value == price,
             "Please send the asking price in order to complete the purchase"
         );
+
         marketItems[_tokenId].seller = payable(address(0));
         _transfer(address(this), msg.sender, _tokenId);
         payable(artist).transfer(royaltyFee);
